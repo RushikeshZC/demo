@@ -3,7 +3,10 @@ package com.example.repository
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
+import kotlinx.coroutines.ensureActive
+import kotlinx.serialization.SerializationException
 import java.net.UnknownHostException
+import kotlin.coroutines.coroutineContext
 
 /**
  * @created on 19/04/25, 12:44 pm
@@ -18,8 +21,13 @@ suspend inline fun <reified T> safeApiCall(
     val response =
         try {
             execute()
-        } catch (e: UnknownHostException) {
+        } catch (_: UnknownHostException) {
             return Result.Error(DomainError.UNKNOWN_HOST)
+        } catch (_: SerializationException) {
+            return Result.Error(DomainError.SERIALIZATION)
+        } catch (e: Exception) {
+            coroutineContext.ensureActive()
+            return Result.Error(DomainError.UNKNOWN)
         }
 
     return responseToResult<T>(response)
@@ -32,7 +40,7 @@ suspend inline fun <reified T> responseToResult(
         in 200..299 ->
             try {
                 Result.Success<T>(response.body())
-            } catch (e: NoTransformationFoundException) {
+            } catch (_: NoTransformationFoundException) {
                 Result.Error(DomainError.SERIALIZATION)
             }
 

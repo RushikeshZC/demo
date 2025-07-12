@@ -7,7 +7,7 @@ package com.example.repository
  * CopyRight (c) 2024 Zoomcar. All Rights Reserved.
  */
 
-private val BASE_URL = "https://api.spaceflightnewsapi.net"
+private const val BASE_URL = "https://api.spaceflightnewsapi.net"
 
 enum class URLS {
     GET_ARTICLES;
@@ -15,9 +15,6 @@ enum class URLS {
     fun getUrl(): String {
         return when (this) {
             GET_ARTICLES -> "/v4/articles"
-            else -> {
-                ""
-            }
         }
     }
 

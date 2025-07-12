@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.repository"
+    namespace = "com.example.domain"
     compileSdk = 36
 
     defaultConfig {
-//        applicationId = "com.example.repository"
+//        applicationId = "com.example.domain"
         minSdk = 28
         targetSdk = 36
 //        versionCode = 1
@@ -39,11 +39,14 @@ android {
 
 dependencies {
 
+    implementation(project(":repository"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.bundles.ktor)
+    implementation(libs.ktor.core)
+
+    implementation(libs.kotlin.serialization)
 }

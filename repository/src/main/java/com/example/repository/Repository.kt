@@ -5,6 +5,8 @@ import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -26,6 +28,7 @@ val client = HttpClient(Android) {
             Json {
                 prettyPrint = true
                 isLenient = true
+                ignoreUnknownKeys = true
             },
             contentType = ContentType.Application.Json
         )
@@ -33,17 +36,29 @@ val client = HttpClient(Android) {
 }
 
 class Repository {
+
     suspend inline fun <reified T> fetchData(
         url: URLS,
-        params: Map<String, String>
+        params: Map<String, String>? = null
     ): Result<T, DomainError> {
         return safeApiCall {
             client.get(urlString = url.constructUrl()) {
                 url {
-                    params.forEach {
+                    params?.forEach {
                         parameters.append(it.key, it.value)
                     }
                 }
+            }
+        }
+    }
+
+    suspend inline fun <reified T,  reified P> postData(
+        url: URLS,
+        data: P
+    ): Result<T, DomainError> {
+        return safeApiCall {
+            client.post(urlString = url.constructUrl()) {
+                setBody<P>(data)
             }
         }
     }
