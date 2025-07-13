@@ -2,6 +2,7 @@
 agp = "8.10.1"
 coilCompose = "3.2.0"
 compiler = "1.5.15"
+koinAndroid = "4.1.0"
 kotlin = "2.1.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -42,6 +43,11 @@ kotlin-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", ver
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
+koin-compose = {module="io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid"}
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinAndroid" }
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -56,4 +62,10 @@ ktor = [
     "ktor-logging",
     "ktor-content-negotiation",
     "kotlin-serialization",
+]
+
+koin = [
+    "koin-android",
+    "koin-compose",
+    "koin-core"
 ]
